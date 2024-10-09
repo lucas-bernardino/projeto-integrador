@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
               },
               child: Text("Modo Debug")
           ),
-          SizedBox(height: 350,),
+          SizedBox(height: 200,),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
