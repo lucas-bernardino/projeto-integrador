@@ -41,27 +41,49 @@ class _SerialState extends State<Serial> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 200,
+      width: 300,
+      margin: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(3.0),
       alignment: Alignment.center,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextButton(
-              onPressed: () {
-                SerialPortReader reader = SerialPortReader(myPort,timeout:3000);
-                Stream upcomingData = reader.stream;
-                upcomingData.listen((data) {
-                  setState(() {
-                    serialBuffer+=String.fromCharCodes(data);
-                  });
-                  print(String.fromCharCodes(data));
-                });
-              },
-              child: Text("Receber dados via serial")
-          ),
-          Text("${serialBuffer}")
-
-        ],
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.blueAccent)
       ),
+      child:
+        ListView(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          SerialPortReader reader = SerialPortReader(myPort,timeout:3000);
+                          Stream upcomingData = reader.stream;
+                          upcomingData.listen((data) {
+                            setState(() {
+                              serialBuffer+=String.fromCharCodes(data);
+                            });
+                            print(String.fromCharCodes(data));
+                          });
+                        },
+                        child: Text("Começar transmissão via Serial")
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          serialBuffer = "";
+                        },
+                        icon: Icon(Icons.delete, color: Colors.red)
+                    ),
+                  ],
+                ),
+                Text("${serialBuffer}", style: TextStyle(color: Colors.white),),
+              ],
+            )
+          ],
+        ),
     );
   }
 }
