@@ -1,3 +1,4 @@
+import 'package:balanca/game.dart';
 import 'package:balanca/serial.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +12,31 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  bool isDebug = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[900],
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Serial()
+          SizedBox(height: 50,),
+          TextButton(
+              onPressed: () {
+                setState(() {
+                  isDebug = !isDebug;
+                });
+              },
+              child: Text("Modo Debug")
+          ),
+          SizedBox(height: 350,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Game(),
+              isDebug ? Serial() : SizedBox(),
+            ],
+          ),
         ],
       ),
     );
