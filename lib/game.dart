@@ -16,8 +16,11 @@ class _GameState extends State<Game> {
   late int num2;
   late String op;
 
+  late double result;
+
   bool isInitialized = false;
   bool isOperationSelected = false;
+  bool shouldShowResult = false;
 
   @override
   Widget build(BuildContext context) {
@@ -76,11 +79,45 @@ class _GameState extends State<Game> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
          if (isInitialized) ...[
-           Text("${num1}", style: TextStyle(color: Colors.orange)),
-           Text("${op}", style: TextStyle(color: Colors.orange),),
-           Text("${num2}", style: TextStyle(color: Colors.orange)),
-         ],       ],
-      )
+           Text("${num1}", style: TextStyle(color: Colors.orange, fontSize: 90)),
+           SizedBox(width: 10,),
+           Text("${op}", style: TextStyle(color: Colors.orange, fontSize: 90),),
+           SizedBox(width: 10,),
+           Text("${num2}", style: TextStyle(color: Colors.orange, fontSize: 90)),
+         ],
+        ],
+      ),
+      SizedBox(height: 30,),
+      TextButton(
+        child: Text("OBTER RESULTADO", style: TextStyle(color: Colors.yellowAccent),),
+        onPressed: () {
+          setState(() {
+            shouldShowResult = !shouldShowResult;
+            switch (op) {
+              case "+":
+                result = num1.toDouble() + num2.toDouble();
+                break;
+              case "-":
+                result = num1.toDouble() - num2.toDouble();
+                break;
+              case "x":
+                result = num1.toDouble() * num2.toDouble();
+                break;
+              case "/":
+                result = num1.toDouble() / num2.toDouble();
+                break;
+            }
+          });
+        },
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (shouldShowResult) ...[
+            Text("${result}", style: TextStyle(color: Colors.orange, fontSize: 90)),
+          ],
+        ],
+      ),
       ],
     );
   }
