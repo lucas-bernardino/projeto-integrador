@@ -33,8 +33,9 @@ class _GameState extends State<Game> {
           },
         ),
         DropdownMenu(
-          width: 400,
-          label: Text("Escoler operação matemática desejada"),
+          width: 250,
+          label: Text("Escoler operação matemática desejada", style: TextStyle(color: Colors.white),),
+          textStyle: TextStyle(color: Colors.yellowAccent),
           onSelected: (x) {
             if (x != null) {
               op = x;
