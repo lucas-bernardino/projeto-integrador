@@ -18,6 +18,8 @@ class _GameState extends State<Game> {
 
   late double result;
 
+  late String level;
+
   bool isInitialized = false;
   bool isOperationSelected = false;
   bool shouldShowResult = false;
@@ -35,42 +37,108 @@ class _GameState extends State<Game> {
             });
           },
         ),
-        DropdownMenu(
-          width: 250,
-          label: Text("Escoler operação matemática desejada", style: TextStyle(color: Colors.white),),
-          textStyle: TextStyle(color: Colors.yellowAccent),
-          onSelected: (x) {
-            if (x != null) {
-              op = x;
-            }
-          },
-            dropdownMenuEntries: [
-              DropdownMenuEntry(
-                  value: "+",
-                  label: "+"
-              ),
-              DropdownMenuEntry(
-                  value: "-",
-                  label: "-"
-              ),
-              DropdownMenuEntry(
-                  value: "x",
-                  label: "x"
-              ),
-              DropdownMenuEntry(
-                  value: "/",
-                  label: "/"
-              ),
-            ]
+        Row(
+          children: [
+            DropdownMenu(
+              width: 250,
+              label: Text("Escoler operação matemática desejada", style: TextStyle(color: Colors.white),),
+              textStyle: TextStyle(color: Colors.yellowAccent),
+              onSelected: (x) {
+                if (x != null) {
+                  op = x;
+                }
+              },
+                dropdownMenuEntries: [
+                  DropdownMenuEntry(
+                      value: "+",
+                      label: "+"
+                  ),
+                  DropdownMenuEntry(
+                      value: "-",
+                      label: "-"
+                  ),
+                  DropdownMenuEntry(
+                      value: "x",
+                      label: "x"
+                  ),
+                  DropdownMenuEntry(
+                      value: "/",
+                      label: "/"
+                  ),
+                ]
+            ),
+            SizedBox(width: 10,),
+            DropdownMenu(
+                width: 250,
+                label: Text("Selecionar dificuldade", style: TextStyle(color: Colors.white),),
+                textStyle: TextStyle(color: Colors.yellowAccent),
+                onSelected: (x) {
+                  if (x != null) {
+                    level = x;
+                  }
+                },
+                dropdownMenuEntries: [
+                  DropdownMenuEntry(
+                      value: "Facil",
+                      label: "Facil"
+                  ),
+                  DropdownMenuEntry(
+                      value: "Dificil",
+                      label: "Dificil"
+                  ),
+                ]
+            ),
+          ],
         ),
         SizedBox(height: 100,),
         TextButton(
           child: Text("OBTER CONTA", style: TextStyle(color: Colors.yellowAccent),),
           onPressed: () {
             setState(() {
-              Random random = new Random();
-              num1 = random.nextInt(10);
-              num2 = random.nextInt(10);
+              if (level.contains("Facil")) {
+                result = 21;
+                while (result > 20 || result == 0) {
+                  Random random = new Random();
+                  num1 = random.nextInt(10);
+                  num2 = random.nextInt(10);
+                  switch (op) {
+                    case "+":
+                      result = num1.toDouble() + num2.toDouble();
+                      break;
+                    case "-":
+                      result = num1.toDouble() - num2.toDouble();
+                      break;
+                    case "x":
+                      result = num1.toDouble() * num2.toDouble();
+                      break;
+                    case "/":
+                      result = num1.toDouble() / num2.toDouble();
+                      break;
+                  }
+                }
+              }
+              else {
+                result = 0;
+                while (result == 0) {
+                  Random random = new Random();
+                  num1 = random.nextInt(10);
+                  num2 = random.nextInt(10);
+                  switch (op) {
+                    case "+":
+                      result = num1.toDouble() + num2.toDouble();
+                      break;
+                    case "-":
+                      result = num1.toDouble() - num2.toDouble();
+                      break;
+                    case "x":
+                      result = num1.toDouble() * num2.toDouble();
+                      break;
+                    case "/":
+                      result = num1.toDouble() / num2.toDouble();
+                      break;
+                  }
+                }
+              }
               isInitialized = true;
             });
           },
@@ -93,20 +161,6 @@ class _GameState extends State<Game> {
         onPressed: () {
           setState(() {
             shouldShowResult = !shouldShowResult;
-            switch (op) {
-              case "+":
-                result = num1.toDouble() + num2.toDouble();
-                break;
-              case "-":
-                result = num1.toDouble() - num2.toDouble();
-                break;
-              case "x":
-                result = num1.toDouble() * num2.toDouble();
-                break;
-              case "/":
-                result = num1.toDouble() / num2.toDouble();
-                break;
-            }
           });
         },
       ),
@@ -114,7 +168,7 @@ class _GameState extends State<Game> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (shouldShowResult) ...[
-            Text("${result}", style: TextStyle(color: Colors.orange, fontSize: 90)),
+            Text("${result.toInt()}", style: TextStyle(color: Colors.orange, fontSize: 90)),
           ],
         ],
       ),
