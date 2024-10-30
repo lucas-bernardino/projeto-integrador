@@ -1,5 +1,6 @@
 import 'package:balanca/game.dart';
 import 'package:balanca/serial.dart';
+import 'package:balanca/tutorial.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,27 @@ class _HomeState extends State<Home> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Game(),
+              ElevatedButton(
+                style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.deepOrange)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Game()),
+                    );
+                  },
+                  child: Text("Jogar", style: TextStyle(color: Colors.white),)
+              ),
+              SizedBox(width: 30,),
+              ElevatedButton(
+                  style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.deepOrange)),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Tutorial()),
+                    );
+                  },
+                  child: Text("Tutorial", style: TextStyle(color: Colors.white),)
+              ),
               isDebug ? Serial() : SizedBox(),
             ],
           ),
