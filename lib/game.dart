@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_libserialport/flutter_libserialport.dart';
 
 import 'dart:math';
 
@@ -23,6 +25,31 @@ class _GameState extends State<Game> {
   bool isInitialized = false;
   bool isOperationSelected = false;
   bool shouldShowResult = false;
+
+  late SerialPort myPort;
+
+  late int guessedValue;
+
+  @override
+  void initState() {
+    super.initState();
+      List<String> availablePorts = SerialPort.availablePorts;
+      if (availablePorts.isNotEmpty) {
+        print("availablePorts: ${availablePorts}");
+        myPort = SerialPort(availablePorts[0]);
+        myPort.openReadWrite();
+        myPort.config = SerialPortConfig()
+          ..baudRate = 9600
+          ..bits = 8
+          ..stopBits = 1
+          ..parity = SerialPortParity.none
+          ..rts = SerialPortRts.flowControl
+          ..cts = SerialPortCts.flowControl
+          ..dsr = SerialPortDsr.flowControl
+          ..dtr = SerialPortDtr.flowControl
+          ..setFlowControl(SerialPortFlowControl.rtsCts);
+      }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,6 +191,17 @@ class _GameState extends State<Game> {
            ],
           ],
         ),
+        isInitialized ? IconButton(
+            onPressed: () {
+            setState(() {
+              getWeightFromSerial(myPort).then((value) {
+                guessedValue = weightConversion(value);
+                print("weightConverted: $guessedValue");
+              },);
+            });
+          },
+            icon: Icon(Icons.question_mark_rounded, size: 45, color: Colors.blue,)
+        ) : SizedBox(),
         SizedBox(height: 30,),
         TextButton(
           child: Text("OBTER RESULTADO", style: TextStyle(color: Colors.yellowAccent),),
@@ -185,4 +223,23 @@ class _GameState extends State<Game> {
       ),
     );
   }
+}
+
+Future<String> getWeightFromSerial(SerialPort port) async {
+  SerialPortReader reader = SerialPortReader(port,timeout:3000);
+  Stream<List<int>> upcomingData = reader.stream;
+
+  await for (var value in upcomingData) {
+    String decodedValue = String.fromCharCodes(value);
+    if (decodedValue.length > 2) {
+      return decodedValue;
+    }
+  }
+
+  return "nonono";
+
+}
+
+int weightConversion(String weight) {
+  return weight.length;
 }
