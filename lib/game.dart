@@ -28,7 +28,7 @@ class _GameState extends State<Game> {
 
   late SerialPort myPort;
 
-  late int guessedValue;
+  late num guessedValue = -1;
 
   @override
   void initState() {
@@ -191,16 +191,21 @@ class _GameState extends State<Game> {
            ],
           ],
         ),
-        isInitialized ? IconButton(
-            onPressed: () {
-            setState(() {
-              getWeightFromSerial(myPort).then((value) {
-                guessedValue = weightConversion(value);
-                print("weightConverted: $guessedValue");
-              },);
-            });
-          },
-            icon: Icon(Icons.question_mark_rounded, size: 45, color: Colors.blue,)
+        isInitialized ? Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+                onPressed: () {
+                  getWeightFromSerial(myPort).then((value) {
+                    setState(() {
+                      guessedValue = value.round();
+                    });
+                  },);
+              },
+                icon: Icon(Icons.question_mark_rounded, size: 45, color: Colors.blue,)
+            ),
+            guessedValue != -1 ? Text("${guessedValue}", style: TextStyle(fontSize: 45, color:  Colors.blueAccent),) : SizedBox()
+          ],
         ) : SizedBox(),
         SizedBox(height: 30,),
         TextButton(
@@ -213,9 +218,14 @@ class _GameState extends State<Game> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (shouldShowResult) ...[
               Text("${result.toInt()}", style: TextStyle(color: Colors.orange, fontSize: 90)),
+              SizedBox(width: 45,),
+              guessedValue == result ?
+              Text("ACERTOU", style: TextStyle(fontSize: 90, color: Colors.green),)
+                  : Text("ERROU", style: TextStyle(fontSize: 90, color: Colors.red),)
             ],
           ],
         ),
@@ -225,21 +235,19 @@ class _GameState extends State<Game> {
   }
 }
 
-Future<String> getWeightFromSerial(SerialPort port) async {
+Future<num> getWeightFromSerial(SerialPort port) async {
   SerialPortReader reader = SerialPortReader(port,timeout:3000);
   Stream<List<int>> upcomingData = reader.stream;
 
   await for (var value in upcomingData) {
     String decodedValue = String.fromCharCodes(value);
-    if (decodedValue.length > 2) {
-      return decodedValue;
+    try {
+      double converted = double.parse(decodedValue) / 4.5;
+      print("converted: ${converted}");
+      return converted;
+    } catch (e) {
     }
   }
 
-  return "nonono";
-
-}
-
-int weightConversion(String weight) {
-  return weight.length;
+  return -1;
 }
