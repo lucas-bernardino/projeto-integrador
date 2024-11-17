@@ -153,7 +153,7 @@ class _GameState extends State<Game> {
               setState(() {
                 if (level.contains("Facil")) {
                   result = 21;
-                  while (result > 20 || result == 0) {
+                  while (result > 20 || result <= 1) {
                     Random random = new Random();
                     num1 = random.nextInt(10);
                     num2 = random.nextInt(10);
@@ -169,13 +169,17 @@ class _GameState extends State<Game> {
                         break;
                       case "/":
                         result = num1.toDouble() / num2.toDouble();
+                        if ((result % 1) != 0) {
+                          result = 0;
+                          continue;
+                        }
                         break;
                     }
                   }
                 }
                 else {
                   result = 0;
-                  while (result == 0) {
+                  while (result <= 1) {
                     Random random = new Random();
                     num1 = random.nextInt(10);
                     num2 = random.nextInt(10);
@@ -191,6 +195,10 @@ class _GameState extends State<Game> {
                         break;
                       case "/":
                         result = num1.toDouble() / num2.toDouble();
+                        if ((result % 1) != 0) {
+                          result = 0;
+                          continue;
+                        }
                         break;
                     }
                   }
