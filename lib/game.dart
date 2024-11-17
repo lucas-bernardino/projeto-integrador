@@ -30,6 +30,8 @@ class _GameState extends State<Game> {
 
   late num guessedValue = -1;
 
+  late int streakCounter = 0;
+
   @override
   void initState() {
     super.initState();
@@ -58,11 +60,29 @@ class _GameState extends State<Game> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Icon(Icons.arrow_back),
+          Stack(
+            children: [
+              Center(
+                child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(Icons.arrow_back),
+                    ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 30.0),
+                  child: Column(
+                    children: [
+                      Text("STREAK", style: TextStyle(color: Colors.yellowAccent, fontWeight: FontWeight.bold)),
+                      Text("${streakCounter}", style: TextStyle(color: Colors.yellowAccent, fontWeight: FontWeight.bold))
+                    ],
+                  ),
+                ),
+              )
+            ],
           ),
           TextButton(
             child: Text("ESCOLHER OPERAÇÃO", style: TextStyle(color: Colors.yellowAccent),),
@@ -199,6 +219,11 @@ class _GameState extends State<Game> {
                   getWeightFromSerial(myPort).then((value) {
                     setState(() {
                       guessedValue = value.round();
+                      if (guessedValue == result) {
+                        streakCounter++;
+                      } else {
+                        streakCounter = 0;
+                      }
                     });
                   },);
               },

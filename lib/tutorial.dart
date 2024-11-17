@@ -33,7 +33,7 @@ class _TutorialState extends State<Tutorial> {
                 ),
                 SizedBox(height: 250,),
                 Center(
-                  child: Text("${titleHeader}", style: TextStyle(color: Colors.yellow, fontSize: 30),),
+                  child: Text("${titleHeader}", style: TextStyle(color: Colors.yellow, fontSize: 40),),
                 ),
                 Center(
                   child: Text("${message}", style: TextStyle(color: Colors.yellow, fontSize: 30),),
