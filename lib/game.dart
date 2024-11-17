@@ -219,11 +219,6 @@ class _GameState extends State<Game> {
                   getWeightFromSerial(myPort).then((value) {
                     setState(() {
                       guessedValue = value.round();
-                      if (guessedValue == result) {
-                        streakCounter++;
-                      } else {
-                        streakCounter = 0;
-                      }
                     });
                   },);
               },
@@ -237,7 +232,21 @@ class _GameState extends State<Game> {
           child: Text("OBTER RESULTADO", style: TextStyle(color: Colors.yellowAccent),),
           onPressed: () {
             setState(() {
-              shouldShowResult = !shouldShowResult;
+              setState(() {
+                shouldShowResult = !shouldShowResult;
+                if (guessedValue == result) {
+                  streakCounter++;
+                } else {
+                  streakCounter = 0;
+                }
+              });
+              Future.delayed(const Duration(seconds: 2)).then((value) {
+                setState(() {
+                  shouldShowResult = !shouldShowResult;
+                  isInitialized = !isInitialized;
+                  guessedValue = -1;
+                });
+              });
             });
           },
         ),
