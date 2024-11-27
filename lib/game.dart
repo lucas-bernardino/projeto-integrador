@@ -248,7 +248,7 @@ class _GameState extends State<Game> {
                   streakCounter = 0;
                 }
               });
-              Future.delayed(const Duration(seconds: 2)).then((value) {
+              Future.delayed(const Duration(seconds: 5)).then((value) {
                 setState(() {
                   shouldShowResult = !shouldShowResult;
                   isInitialized = !isInitialized;
@@ -267,7 +267,28 @@ class _GameState extends State<Game> {
               SizedBox(width: 45,),
               guessedValue == result ?
               Text("ACERTOU", style: TextStyle(fontSize: 90, color: Colors.green),)
-                  : Text("ERROU", style: TextStyle(fontSize: 90, color: Colors.red),)
+                  : Text("ERROU", style: TextStyle(fontSize: 90, color: Colors.red),),
+              SizedBox(width: 15,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(result.toInt() ~/ 10, (index) {
+                  return Image(
+                    width: 120,
+                    height: 120,
+                    image: AssetImage('assets/dezena.png'),
+                  );
+                }),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(result.toInt() % 10, (index) {
+                  return Image(
+                    width: 40,
+                    height: 40,
+                    image: AssetImage('assets/unidade.png'),
+                  );
+                }),
+              )
             ],
           ],
         ),
@@ -280,7 +301,6 @@ class _GameState extends State<Game> {
 Future<num> getWeightFromSerial(SerialPort port) async {
   SerialPortReader reader = SerialPortReader(port,timeout:3000);
   Stream<List<int>> upcomingData = reader.stream;
-
   await for (var value in upcomingData) {
     try {
       String decodedValue = String.fromCharCodes(value);
@@ -290,6 +310,5 @@ Future<num> getWeightFromSerial(SerialPort port) async {
     } catch (e) {
     }
   }
-
   return -1;
 }
