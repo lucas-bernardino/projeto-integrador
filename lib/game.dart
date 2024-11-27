@@ -282,8 +282,8 @@ Future<num> getWeightFromSerial(SerialPort port) async {
   Stream<List<int>> upcomingData = reader.stream;
 
   await for (var value in upcomingData) {
-    String decodedValue = String.fromCharCodes(value);
     try {
+      String decodedValue = String.fromCharCodes(value);
       double converted = double.parse(decodedValue) / 3.0;
       print("converted: ${converted}");
       return converted;
