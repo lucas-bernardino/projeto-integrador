@@ -57,242 +57,295 @@ class _GameState extends State<Game> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[900],
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Stack(
-            children: [
-              Center(
-                child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(Icons.arrow_back),
+      body: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,//<--- add this
+              image: AssetImage('assets/background.jpg'),
+            )
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                Center(
+                  child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.arrow_back),
+                      ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 30.0),
+                    child: Column(
+                      children: [
+                        Text("STREAK", style: TextStyle(color: Colors.yellowAccent, fontWeight: FontWeight.bold)),
+                        Text("${streakCounter}", style: TextStyle(color: Colors.yellowAccent, fontWeight: FontWeight.bold))
+                      ],
                     ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 30.0),
-                  child: Column(
-                    children: [
-                      Text("STREAK", style: TextStyle(color: Colors.yellowAccent, fontWeight: FontWeight.bold)),
-                      Text("${streakCounter}", style: TextStyle(color: Colors.yellowAccent, fontWeight: FontWeight.bold))
-                    ],
+                  ),
+                )
+              ],
+            ),
+            TextButton(
+              child: Container(
+                padding: EdgeInsets.all(5), // Adjust padding as needed
+                decoration: BoxDecoration(
+                  color: Colors.yellow[900],
+                  borderRadius: BorderRadius.circular(10), // Adjust the radius for roundness
+                ),
+                child: Text(
+                  "ESCOLHER OPERAÇÃO",
+                  style: TextStyle(
+                    color: Colors.yellow[400],
+                    fontSize: 15,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
-              )
+              ),
+              onPressed: () {
+                setState(() {
+                  isOperationSelected = !isOperationSelected;
+                });
+              },
+            ),
+            SizedBox(height: 10,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                DropdownMenu(
+                  width: 250,
+                  label: Text("Escolher operação matemática", style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold)),
+                  textStyle: TextStyle(color: Colors.yellowAccent),
+                  onSelected: (x) {
+                    if (x != null) {
+                      op = x;
+                    }
+                  },
+                    dropdownMenuEntries: [
+                      DropdownMenuEntry(
+                          value: "+",
+                          label: "+"
+                      ),
+                      DropdownMenuEntry(
+                          value: "-",
+                          label: "-"
+                      ),
+                      DropdownMenuEntry(
+                          value: "x",
+                          label: "x"
+                      ),
+                      DropdownMenuEntry(
+                          value: "/",
+                          label: "/"
+                      ),
+                    ]
+                ),
+                SizedBox(width: 10,),
+                DropdownMenu(
+                    width: 250,
+                    label: Text("Selecionar dificuldade", style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold)),
+                    textStyle: TextStyle(fontSize: 20, color: Colors.yellow, fontWeight: FontWeight.bold),
+                    onSelected: (x) {
+                      if (x != null) {
+                        level = x;
+                      }
+                    },
+                    dropdownMenuEntries: [
+                      DropdownMenuEntry(
+                          value: "Facil",
+                          label: "Facil"
+                      ),
+                      DropdownMenuEntry(
+                          value: "Dificil",
+                          label: "Dificil"
+                      ),
+                    ]
+                ),
+              ],
+            ),
+            SizedBox(height: 100,),
+            TextButton(
+              child: Container(
+                padding: EdgeInsets.all(5), // Adjust padding as needed
+                decoration: BoxDecoration(
+                color: Colors.yellow[900],
+                borderRadius: BorderRadius.circular(10), // Adjust the radius for roundness
+                ),
+                child: Text(
+                  "OBTER CONTA",
+                  style: TextStyle(
+                  color: Colors.yellow[400],
+                  fontSize: 15,
+                  fontWeight: FontWeight.w900,
+                  ),
+                  ),
+                ),
+              onPressed: () {
+                setState(() {
+                  if (level.contains("Facil")) {
+                    result = 21;
+                    while (result > 20 || result <= 1) {
+                      Random random = new Random();
+                      num1 = random.nextInt(10);
+                      num2 = random.nextInt(10);
+                      switch (op) {
+                        case "+":
+                          result = num1.toDouble() + num2.toDouble();
+                          break;
+                        case "-":
+                          result = num1.toDouble() - num2.toDouble();
+                          break;
+                        case "x":
+                          result = num1.toDouble() * num2.toDouble();
+                          break;
+                        case "/":
+                          result = num1.toDouble() / num2.toDouble();
+                          if ((result % 1) != 0) {
+                            result = 0;
+                            continue;
+                          }
+                          break;
+                      }
+                    }
+                  }
+                  else {
+                    result = 0;
+                    while (result <= 1) {
+                      Random random = new Random();
+                      num1 = random.nextInt(10);
+                      num2 = random.nextInt(10);
+                      switch (op) {
+                        case "+":
+                          result = num1.toDouble() + num2.toDouble();
+                          break;
+                        case "-":
+                          result = num1.toDouble() - num2.toDouble();
+                          break;
+                        case "x":
+                          result = num1.toDouble() * num2.toDouble();
+                          break;
+                        case "/":
+                          result = num1.toDouble() / num2.toDouble();
+                          if ((result % 1) != 0) {
+                            result = 0;
+                            continue;
+                          }
+                          break;
+                      }
+                    }
+                  }
+                  isInitialized = true;
+                });
+              },
+            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+             if (isInitialized) ...[
+               Text("${num1}", style: TextStyle(color: Colors.orange[900], fontSize: 90, fontWeight: FontWeight.bold)),
+               Text("${op}", style: TextStyle(color: Colors.orange[900], fontSize: 90, fontWeight: FontWeight.bold),),
+               Text("${num2}", style: TextStyle(color: Colors.orange[900], fontSize: 90, fontWeight: FontWeight.bold)),
+             ],
             ],
           ),
+          isInitialized ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: 40,
+                backgroundColor: Colors.yellow[400],
+                child: IconButton(
+                    onPressed: () {
+                      getWeightFromSerial(myPort).then((value) {
+                        setState(() {
+                          guessedValue = value.round();
+                        });
+                      },);
+                  },
+                    icon: Icon(Icons.question_mark_rounded, size: 60, color: Colors.yellow[900])
+                ),
+              ),
+              guessedValue != -1 ? Text("${guessedValue}", style: TextStyle(fontSize: 90, color:  Colors.blueAccent, fontWeight: FontWeight.bold),) : SizedBox()
+            ],
+          ) : SizedBox(),
+          SizedBox(height: 30,),
           TextButton(
-            child: Text("ESCOLHER OPERAÇÃO", style: TextStyle(color: Colors.yellowAccent),),
+            child: Container(
+              padding: EdgeInsets.all(5), // Adjust padding as needed
+              decoration: BoxDecoration(
+                color: Colors.yellow[900],
+                borderRadius: BorderRadius.circular(10), // Adjust the radius for roundness
+              ),
+              child: Text(
+                "OBTER RESULTADO",
+                style: TextStyle(
+                  color: Colors.yellow[400],
+                  fontSize: 15,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
             onPressed: () {
               setState(() {
-                isOperationSelected = !isOperationSelected;
+                setState(() {
+                  shouldShowResult = !shouldShowResult;
+                  if (guessedValue == result) {
+                    streakCounter++;
+                  } else {
+                    streakCounter = 0;
+                  }
+                });
+                Future.delayed(const Duration(seconds: 5)).then((value) {
+                  setState(() {
+                    shouldShowResult = !shouldShowResult;
+                    isInitialized = !isInitialized;
+                    guessedValue = -1;
+                  });
+                });
               });
             },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              DropdownMenu(
-                width: 250,
-                label: Text("Escoler operação matemática desejada", style: TextStyle(color: Colors.white),),
-                textStyle: TextStyle(color: Colors.yellowAccent),
-                onSelected: (x) {
-                  if (x != null) {
-                    op = x;
-                  }
-                },
-                  dropdownMenuEntries: [
-                    DropdownMenuEntry(
-                        value: "+",
-                        label: "+"
-                    ),
-                    DropdownMenuEntry(
-                        value: "-",
-                        label: "-"
-                    ),
-                    DropdownMenuEntry(
-                        value: "x",
-                        label: "x"
-                    ),
-                    DropdownMenuEntry(
-                        value: "/",
-                        label: "/"
-                    ),
-                  ]
-              ),
-              SizedBox(width: 10,),
-              DropdownMenu(
-                  width: 250,
-                  label: Text("Selecionar dificuldade", style: TextStyle(color: Colors.white),),
-                  textStyle: TextStyle(color: Colors.yellowAccent),
-                  onSelected: (x) {
-                    if (x != null) {
-                      level = x;
-                    }
-                  },
-                  dropdownMenuEntries: [
-                    DropdownMenuEntry(
-                        value: "Facil",
-                        label: "Facil"
-                    ),
-                    DropdownMenuEntry(
-                        value: "Dificil",
-                        label: "Dificil"
-                    ),
-                  ]
-              ),
+              if (shouldShowResult) ...[
+                Text("${result.toInt()}", style: TextStyle(color: Colors.orange[900], fontSize: 90, fontWeight: FontWeight.bold),),
+                SizedBox(width: 45,),
+                guessedValue == result ?
+                Text("ACERTOU", style: TextStyle(fontSize: 90, color: Colors.green, fontWeight: FontWeight.bold),)
+                    : Text("ERROU", style: TextStyle(fontSize: 90, color: Colors.red, fontWeight: FontWeight.bold),),
+                SizedBox(width: 15,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(result.toInt() ~/ 10, (index) {
+                    return Image(
+                      width: 120,
+                      height: 120,
+                      image: AssetImage('assets/dezena.png'),
+                    );
+                  }),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(result.toInt() % 10, (index) {
+                    return Image(
+                      width: 40,
+                      height: 40,
+                      image: AssetImage('assets/unidade.png'),
+                    );
+                  }),
+                )
+              ],
             ],
           ),
-          SizedBox(height: 100,),
-          TextButton(
-            child: Text("OBTER CONTA", style: TextStyle(color: Colors.yellowAccent),),
-            onPressed: () {
-              setState(() {
-                if (level.contains("Facil")) {
-                  result = 21;
-                  while (result > 20 || result <= 1) {
-                    Random random = new Random();
-                    num1 = random.nextInt(10);
-                    num2 = random.nextInt(10);
-                    switch (op) {
-                      case "+":
-                        result = num1.toDouble() + num2.toDouble();
-                        break;
-                      case "-":
-                        result = num1.toDouble() - num2.toDouble();
-                        break;
-                      case "x":
-                        result = num1.toDouble() * num2.toDouble();
-                        break;
-                      case "/":
-                        result = num1.toDouble() / num2.toDouble();
-                        if ((result % 1) != 0) {
-                          result = 0;
-                          continue;
-                        }
-                        break;
-                    }
-                  }
-                }
-                else {
-                  result = 0;
-                  while (result <= 1) {
-                    Random random = new Random();
-                    num1 = random.nextInt(10);
-                    num2 = random.nextInt(10);
-                    switch (op) {
-                      case "+":
-                        result = num1.toDouble() + num2.toDouble();
-                        break;
-                      case "-":
-                        result = num1.toDouble() - num2.toDouble();
-                        break;
-                      case "x":
-                        result = num1.toDouble() * num2.toDouble();
-                        break;
-                      case "/":
-                        result = num1.toDouble() / num2.toDouble();
-                        if ((result % 1) != 0) {
-                          result = 0;
-                          continue;
-                        }
-                        break;
-                    }
-                  }
-                }
-                isInitialized = true;
-              });
-            },
-          ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-           if (isInitialized) ...[
-             Text("${num1}", style: TextStyle(color: Colors.orange, fontSize: 90)),
-             SizedBox(width: 10,),
-             Text("${op}", style: TextStyle(color: Colors.orange, fontSize: 90),),
-             SizedBox(width: 10,),
-             Text("${num2}", style: TextStyle(color: Colors.orange, fontSize: 90)),
-           ],
           ],
         ),
-        isInitialized ? Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            IconButton(
-                onPressed: () {
-                  getWeightFromSerial(myPort).then((value) {
-                    setState(() {
-                      guessedValue = value.round();
-                    });
-                  },);
-              },
-                icon: Icon(Icons.question_mark_rounded, size: 45, color: Colors.blue,)
-            ),
-            guessedValue != -1 ? Text("${guessedValue}", style: TextStyle(fontSize: 45, color:  Colors.blueAccent),) : SizedBox()
-          ],
-        ) : SizedBox(),
-        SizedBox(height: 30,),
-        TextButton(
-          child: Text("OBTER RESULTADO", style: TextStyle(color: Colors.yellowAccent),),
-          onPressed: () {
-            setState(() {
-              setState(() {
-                shouldShowResult = !shouldShowResult;
-                if (guessedValue == result) {
-                  streakCounter++;
-                } else {
-                  streakCounter = 0;
-                }
-              });
-              Future.delayed(const Duration(seconds: 5)).then((value) {
-                setState(() {
-                  shouldShowResult = !shouldShowResult;
-                  isInitialized = !isInitialized;
-                  guessedValue = -1;
-                });
-              });
-            });
-          },
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (shouldShowResult) ...[
-              Text("${result.toInt()}", style: TextStyle(color: Colors.orange, fontSize: 90)),
-              SizedBox(width: 45,),
-              guessedValue == result ?
-              Text("ACERTOU", style: TextStyle(fontSize: 90, color: Colors.green),)
-                  : Text("ERROU", style: TextStyle(fontSize: 90, color: Colors.red),),
-              SizedBox(width: 15,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(result.toInt() ~/ 10, (index) {
-                  return Image(
-                    width: 120,
-                    height: 120,
-                    image: AssetImage('assets/dezena.png'),
-                  );
-                }),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(result.toInt() % 10, (index) {
-                  return Image(
-                    width: 40,
-                    height: 40,
-                    image: AssetImage('assets/unidade.png'),
-                  );
-                }),
-              )
-            ],
-          ],
-        ),
-        ],
       ),
     );
   }

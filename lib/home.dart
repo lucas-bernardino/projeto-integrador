@@ -21,7 +21,6 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.grey[900],
       body: Container(
         decoration: BoxDecoration(
-            color: Colors.red,
             image: DecorationImage(
               fit: BoxFit.cover,//<--- add this
               image: AssetImage('assets/background.jpg'),
@@ -41,10 +40,20 @@ class _HomeState extends State<Home> {
             Column(
               children: [
                 Container(
+                  padding: EdgeInsets.all(10), // Adjust padding as needed
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(30))
+                    color: Colors.yellow[900],
+                    borderRadius: BorderRadius.circular(20), // Adjust the radius for roundness
                   ),
-                    child: Text("MATERIAL DOURADO", style: TextStyle(color: Colors.yellow[400], fontSize: 50, fontWeight: FontWeight.w900, backgroundColor: Colors.yellow[900]),)),
+                  child: Text(
+                    "MATERIAL DOURADO",
+                    style: TextStyle(
+                      color: Colors.yellow[400],
+                      fontSize: 50,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
                 SizedBox(height: 100,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
