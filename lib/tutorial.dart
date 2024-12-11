@@ -20,26 +20,63 @@ class _TutorialState extends State<Tutorial> {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       body:
-        Center(
-          child:
-            Column(
-              children: [
-                SizedBox(height: 15,),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Icon(Icons.arrow_back),
-                ),
-                SizedBox(height: 250,),
-                Center(
-                  child: Text("${titleHeader}", style: TextStyle(color: Colors.yellow, fontSize: 40),),
-                ),
-                Center(
-                  child: Text("${message}", style: TextStyle(color: Colors.yellow, fontSize: 30),),
-                )
-              ],
-            ),
+        Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,//<--- add this
+                image: AssetImage('assets/background.jpg'),
+              )),
+          child: Center(
+            child:
+              Column(
+                children: [
+                  SizedBox(height: 15,),
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(Icons.arrow_back),
+                  ),
+                  SizedBox(height: 250,),
+                  Center(
+                    child: Container(
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: Colors.yellow[900],
+                        borderRadius: BorderRadius.circular(20), // Adjust the radius for roundness
+                      ),
+                      child: Text(
+                        "${titleHeader}",
+                        style: TextStyle(
+                          color: Colors.yellow[400],
+                          fontSize: 50,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 60,),
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.all(10), // Adjust padding as needed
+                      height: 110,
+                      decoration: BoxDecoration(
+                        color: Colors.yellow[900],
+                        borderRadius: BorderRadius.circular(20), // Adjust the radius for roundness
+                      ),
+                      child: Text(
+                        "${message}",
+                        style: TextStyle(
+                          color: Colors.yellow[400],
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+          ),
         ),
     );
   }
